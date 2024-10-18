@@ -1,12 +1,45 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import InputField from '../components/inputField'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ConfigScreen = () => {
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const data = await AsyncStorage.getItem('userData');
+                if (data) {
+                    const userData = JSON.parse(data);
+                    setForm(userData.form);
+                    setContact1(userData.emergencyContacts[0]);
+                    setContact2(userData.emergencyContacts[1]);
+                }
+            } catch (error) {
+                console.error('Failed to get data', error);
+            }
+        };
+        getData();
+    }, []);
+
+
     const [form, setForm] = useState({});
     const [contact1, setContact1] = useState({});
     const [contact2, setContact2] = useState({});
-    console.log(form, contact1, contact2);
+
+    const saveData = async () => {
+        try {
+            const data = {
+                form,
+                emergencyContacts: [contact1, contact2],
+            };
+            await AsyncStorage.setItem('userData', JSON.stringify(data));
+            ToastAndroid.show('Data saved successfully!', ToastAndroid.SHORT);
+        } catch (error) {
+            console.error('Failed to save data', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Personal Details :</Text>
@@ -28,7 +61,7 @@ const ConfigScreen = () => {
                     type={'em'}
                 />
             </View>
-            <TouchableOpacity style={styles.add} >
+            <TouchableOpacity style={styles.add} onPress={()=>saveData()}>
                 <Text style={styles.addText}>Save</Text>
             </TouchableOpacity>
         </View>
@@ -48,7 +81,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 20,
         marginHorizontal: 'auto',
-
+        marginTop: 20,
     },
     add: {
         flexDirection: 'row',

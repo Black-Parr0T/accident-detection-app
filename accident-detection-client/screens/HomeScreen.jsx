@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer, Gyroscope } from 'expo-sensors';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AccidentDetectCard from '../components/AccidentDetectCard';
 
 const THRESHOLD = 1.0;
 const ROLLOVER_THRESHOLD = 2.5;
@@ -103,6 +104,10 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={[styles.btnText, { color: 'blue' }]}>Add/Edit Data</Text>
                 <AntDesign name="arrowright" size={24} color="black" />
             </TouchableOpacity>
+
+            {
+                suddenMovement || rolloverDetected && <AccidentDetectCard />
+            }
         </View>
     );
 };

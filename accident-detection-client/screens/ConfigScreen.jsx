@@ -2,6 +2,7 @@ import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-na
 import React, { useEffect, useState } from 'react'
 import InputField from '../components/inputField'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../components/Button';
 
 const ConfigScreen = () => {
 
@@ -61,9 +62,7 @@ const ConfigScreen = () => {
                     type={'em'}
                 />
             </View>
-            <TouchableOpacity style={styles.add} onPress={()=>saveData()}>
-                <Text style={styles.addText}>Save</Text>
-            </TouchableOpacity>
+            <Button click={saveData} text="Save" />
         </View>
     )
 }
